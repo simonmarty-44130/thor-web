@@ -1,0 +1,17 @@
+{
+  "name": "thor-web-transcription-complete",
+  "version": "1.0.0",
+  "description": "THOR WEB - Transcription completion handler",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.621.0",
+    "@aws-sdk/lib-dynamodb": "^3.621.0",
+    "@aws-sdk/client-s3": "^3.621.0",
+    "@aws-sdk/client-sqs": "^3.621.0"
+  },
+  "author": "Radio Fidélité",
+  "license": "ISC"
+}
