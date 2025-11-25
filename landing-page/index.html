@@ -545,7 +545,7 @@
                         <li>Tous formats acceptés</li>
                         <li>Régénération illimitée</li>
                     </ul>
-                    <a href="https://titre.thorpodcast.link" class="pricing-button">Commencer</a>
+                    <a href="#" onclick="selectPlan('essential')" class="pricing-button">Commencer</a>
                 </div>
 
                 <div class="pricing-card popular">
@@ -560,7 +560,7 @@
                         <li>Régénération illimitée</li>
                         <li>Support prioritaire</li>
                     </ul>
-                    <a href="https://titre.thorpodcast.link" class="pricing-button">Commencer</a>
+                    <a href="#" onclick="selectPlan('complete')" class="pricing-button">Commencer</a>
                 </div>
 
                 <div class="pricing-card">
@@ -574,7 +574,7 @@
                         <li>Régénération illimitée</li>
                         <li>Support dédié</li>
                     </ul>
-                    <a href="https://titre.thorpodcast.link" class="pricing-button">Commencer</a>
+                    <a href="#" onclick="selectPlan('premium')" class="pricing-button">Commencer</a>
                 </div>
             </div>
         </div>
@@ -586,5 +586,12 @@
             <p>© 2025 THOR Podcast — L'outil des radios et podcasteurs</p>
         </div>
     </footer>
+
+    <script>
+        function selectPlan(plan) {
+            localStorage.setItem('pendingSubscription', plan);
+            window.location.href = '/register.html';
+        }
+    </script>
 </body>
 </html>
