@@ -16,40 +16,12 @@
     <meta property="og:url" content="https://thorpodcast.link/">
     <meta property="og:title" content="THOR Podcast | Générateur de contenus pour radios et podcasts">
     <meta property="og:description" content="Gagnez du temps : générez titres, résumés et articles web automatiquement à partir de vos émissions.">
-    <meta property="og:image" content="https://thorpodcast.link/og-image.png">
-
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="THOR Podcast | Générateur de contenus pour radios et podcasts">
-    <meta name="twitter:description" content="Gagnez du temps : générez titres, résumés et articles web automatiquement à partir de vos émissions.">
 
     <!-- Canonical URL -->
     <link rel="canonical" href="https://thorpodcast.link/">
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎙️</text></svg>">
-
-    <!-- Schema.org structured data -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
-        "name": "THOR Podcast",
-        "applicationCategory": "BusinessApplication",
-        "operatingSystem": "Web",
-        "description": "Outil de génération automatique de titres, résumés et articles pour radios et podcasteurs",
-        "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "EUR"
-        },
-        "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": "4.8",
-            "ratingCount": "50"
-        }
-    }
-    </script>
 
     <style>
         * {
@@ -59,509 +31,560 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
             min-height: 100vh;
-            background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 50%, #3d7ab5 100%);
+            background: #f8fafc;
+            color: #1e293b;
         }
 
-        .container {
-            max-width: 1200px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-            color: white;
-        }
-
-        .logo {
-            font-size: 56px;
-            font-weight: 800;
-            margin-bottom: 20px;
-            text-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-        }
-
-        .logo-icon {
-            font-size: 52px;
-        }
-
-        h1 {
-            font-size: 32px;
-            font-weight: 600;
-            margin-bottom: 16px;
-            line-height: 1.3;
-        }
-
-        .tagline {
-            font-size: 20px;
-            font-weight: 400;
-            opacity: 0.95;
-            margin-bottom: 12px;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.5;
-        }
-
-        .subtitle {
-            font-size: 16px;
-            opacity: 0.8;
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
-
-        .benefits {
-            display: flex;
-            justify-content: center;
-            gap: 32px;
-            margin: 32px 0;
-            flex-wrap: wrap;
-        }
-
-        .benefit {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: white;
-            font-size: 15px;
-            background: rgba(255,255,255,0.1);
-            padding: 10px 20px;
-            border-radius: 50px;
-        }
-
-        .benefit-icon {
-            font-size: 18px;
-        }
-
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-            gap: 32px;
-            margin-bottom: 48px;
-        }
-
-        .card {
+        /* Navigation */
+        .nav {
             background: white;
-            border-radius: 20px;
-            padding: 40px 32px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            text-decoration: none;
-            color: inherit;
+            padding: 16px 24px;
             display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #1e3a5f, #3d7ab5);
-        }
-
-        .card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
-        }
-
-        .card-header {
-            display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 16px;
-            margin-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .card-icon {
-            font-size: 48px;
-        }
-
-        .card-title {
-            font-size: 26px;
+        .nav-logo {
+            font-size: 24px;
             font-weight: 700;
             color: #1e3a5f;
-        }
-
-        .card-badge {
-            font-size: 12px;
-            background: #e0f2fe;
-            color: #0369a1;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-weight: 600;
-        }
-
-        .card-description {
-            font-size: 16px;
-            color: #475569;
-            line-height: 1.7;
-            margin-bottom: 24px;
-        }
-
-        .card-usecase {
-            background: #f8fafc;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 24px;
-        }
-
-        .card-usecase-title {
-            font-size: 13px;
-            font-weight: 600;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 8px;
-        }
-
-        .card-usecase-text {
-            font-size: 14px;
-            color: #334155;
-            line-height: 1.6;
-        }
-
-        .card-features {
-            list-style: none;
-            margin-bottom: 28px;
-            flex-grow: 1;
-        }
-
-        .card-features li {
-            padding: 10px 0;
-            color: #475569;
-            font-size: 15px;
-            border-bottom: 1px solid #f1f5f9;
+            text-decoration: none;
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .card-features li:last-child {
-            border-bottom: none;
+        .nav-logo span {
+            font-size: 22px;
         }
 
-        .check-icon {
-            color: #10b981;
-            font-weight: bold;
-            font-size: 16px;
-        }
-
-        .card-button {
-            padding: 16px 28px;
-            background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%);
+        .nav-button {
+            padding: 10px 20px;
+            background: #1e3a5f;
             color: white;
             border: none;
-            border-radius: 12px;
-            font-size: 17px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .nav-button:hover {
+            background: #2d5a87;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 80px 0 60px;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 19px;
+            color: #64748b;
+            max-width: 600px;
+            margin: 0 auto 32px;
+            line-height: 1.6;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            padding: 14px 28px;
+            background: #1e3a5f;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: #2d5a87;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            padding: 14px 28px;
+            background: white;
+            color: #1e3a5f;
+            border: 2px solid #1e3a5f;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background: #f1f5f9;
+        }
+
+        /* Features */
+        .features {
+            padding: 60px 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            border: 1px solid #e2e8f0;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s;
+        }
+
+        .feature-card:hover {
+            border-color: #1e3a5f;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: 16px;
+        }
+
+        .feature-card h3 {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1e293b;
+        }
+
+        .feature-badge {
+            display: inline-block;
+            font-size: 12px;
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            font-size: 15px;
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            font-size: 14px;
+            color: #475569;
+            padding: 6px 0;
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 8px;
         }
 
-        .card-button:hover {
-            transform: scale(1.02);
-            box-shadow: 0 8px 24px rgba(30, 58, 95, 0.4);
+        .feature-list li::before {
+            content: "✓";
+            color: #10b981;
+            font-weight: 600;
         }
 
-        .card.titre::before {
-            background: linear-gradient(90deg, #059669, #10b981);
+        /* Pricing */
+        .pricing {
+            padding: 80px 0;
+            background: white;
+            border-top: 1px solid #e2e8f0;
         }
 
-        .card.web::before {
-            background: linear-gradient(90deg, #d97706, #f59e0b);
+        .pricing h2 {
+            text-align: center;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
         }
 
-        .how-it-works {
-            background: rgba(255,255,255,0.1);
-            border-radius: 20px;
-            padding: 40px;
+        .pricing-subtitle {
+            text-align: center;
+            font-size: 17px;
+            color: #64748b;
             margin-bottom: 48px;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 32px 24px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .pricing-card.popular {
+            border-color: #1e3a5f;
+            background: white;
+            transform: scale(1.02);
+        }
+
+        .pricing-card.popular .pricing-badge {
+            display: block;
+        }
+
+        .pricing-badge {
+            display: none;
+            background: #1e3a5f;
             color: white;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 16px;
+        }
+
+        .pricing-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .pricing-price {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1e3a5f;
+            margin-bottom: 4px;
+        }
+
+        .pricing-price span {
+            font-size: 16px;
+            font-weight: 400;
+            color: #64748b;
+        }
+
+        .pricing-credits {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 24px;
+        }
+
+        .pricing-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 24px;
+        }
+
+        .pricing-features li {
+            font-size: 14px;
+            color: #475569;
+            padding: 8px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-button {
+            width: 100%;
+            padding: 12px 20px;
+            background: #1e3a5f;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            transition: background 0.2s;
+        }
+
+        .pricing-button:hover {
+            background: #2d5a87;
+        }
+
+        .pricing-card:not(.popular) .pricing-button {
+            background: white;
+            color: #1e3a5f;
+            border: 2px solid #1e3a5f;
+        }
+
+        .pricing-card:not(.popular) .pricing-button:hover {
+            background: #f1f5f9;
+        }
+
+        /* How it works */
+        .how-it-works {
+            padding: 60px 0;
         }
 
         .how-it-works h2 {
             text-align: center;
             font-size: 28px;
-            margin-bottom: 32px;
+            font-weight: 700;
+            margin-bottom: 40px;
         }
 
         .steps {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            display: flex;
+            justify-content: space-between;
             gap: 24px;
         }
 
         .step {
+            flex: 1;
             text-align: center;
-            padding: 20px;
         }
 
         .step-number {
-            width: 48px;
-            height: 48px;
-            background: white;
-            color: #1e3a5f;
+            width: 40px;
+            height: 40px;
+            background: #1e3a5f;
+            color: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
-            font-weight: 700;
-            margin: 0 auto 16px;
-        }
-
-        .step-title {
-            font-size: 18px;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin: 0 auto 12px;
         }
 
-        .step-text {
+        .step h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .step p {
             font-size: 14px;
-            opacity: 0.9;
-            line-height: 1.5;
-        }
-
-        .testimonial {
-            background: white;
-            border-radius: 16px;
-            padding: 32px;
-            margin-bottom: 48px;
-            text-align: center;
-        }
-
-        .testimonial-text {
-            font-size: 18px;
-            color: #334155;
-            font-style: italic;
-            line-height: 1.7;
-            margin-bottom: 16px;
-        }
-
-        .testimonial-author {
-            font-size: 15px;
             color: #64748b;
-            font-weight: 600;
         }
 
+        /* Footer */
         .footer {
+            padding: 32px 0;
             text-align: center;
-            color: white;
-            opacity: 0.8;
+            border-top: 1px solid #e2e8f0;
+            color: #64748b;
             font-size: 14px;
-            padding: 20px 0;
         }
 
-        .footer a {
-            color: white;
-            text-decoration: underline;
-        }
-
+        /* Responsive */
         @media (max-width: 768px) {
-            .logo {
-                font-size: 40px;
-                flex-direction: column;
-                gap: 8px;
+            .hero h1 {
+                font-size: 32px;
             }
 
-            .logo-icon {
-                font-size: 44px;
-            }
-
-            h1 {
-                font-size: 24px;
-            }
-
-            .tagline {
+            .hero p {
                 font-size: 17px;
             }
 
-            .benefits {
-                gap: 12px;
-            }
-
-            .benefit {
-                padding: 8px 14px;
-                font-size: 13px;
-            }
-
-            .cards {
+            .features-grid {
                 grid-template-columns: 1fr;
-                gap: 24px;
             }
 
-            .card {
-                padding: 28px 20px;
+            .pricing-grid {
+                grid-template-columns: 1fr;
             }
 
-            .card-title {
-                font-size: 22px;
-            }
-
-            .how-it-works {
-                padding: 28px 20px;
+            .pricing-card.popular {
+                transform: none;
             }
 
             .steps {
-                grid-template-columns: 1fr;
+                flex-direction: column;
+                gap: 32px;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+                align-items: center;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <a href="/" class="nav-logo">
+            <span>🎙️</span> THOR PODCAST
+        </a>
+        <a href="https://titre.thorpodcast.link" class="nav-button">S'identifier</a>
+    </nav>
+
     <div class="container">
-        <header class="header">
-            <div class="logo">
-                <span class="logo-icon">🎙️</span>
-                <span>THOR PODCAST</span>
+        <!-- Hero -->
+        <section class="hero">
+            <h1>Créez vos contenus podcast en quelques clics</h1>
+            <p>Générez automatiquement titres, résumés et articles web à partir de vos conducteurs d'émission ou fichiers audio.</p>
+            <div class="hero-cta">
+                <a href="#pricing" class="btn-primary">Voir les offres</a>
+                <a href="#features" class="btn-secondary">Découvrir</a>
             </div>
-            <h1>L'assistant des radios et podcasteurs pour créer leurs contenus</h1>
-            <p class="tagline">
-                Générez automatiquement titres, résumés et articles web à partir de vos conducteurs d'émission ou enregistrements audio.
-            </p>
-            <p class="subtitle">
-                Conçu pour les professionnels de la radio et du podcast qui veulent gagner du temps sans sacrifier la qualité éditoriale.
-            </p>
+        </section>
 
-            <div class="benefits">
-                <div class="benefit">
-                    <span class="benefit-icon">⚡</span>
-                    <span>Résultats en 30 secondes</span>
-                </div>
-                <div class="benefit">
-                    <span class="benefit-icon">✍️</span>
-                    <span>Ton professionnel</span>
-                </div>
-                <div class="benefit">
-                    <span class="benefit-icon">🔄</span>
-                    <span>Régénération illimitée</span>
-                </div>
-            </div>
-        </header>
-
-        <main>
-            <div class="cards">
-                <a href="https://titre.thorpodcast.link" class="card titre" aria-label="Accéder au générateur de titres et résumés">
-                    <div class="card-header">
-                        <div class="card-icon">📝</div>
-                        <div>
-                            <div class="card-title">Titre & Résumé</div>
-                            <span class="card-badge">À partir du conducteur</span>
-                        </div>
-                    </div>
-                    <p class="card-description">
-                        Uploadez le conducteur de votre émission (script, notes, plan) et obtenez instantanément un titre accrocheur et un résumé engageant pour vos plateformes de diffusion.
-                    </p>
-                    <div class="card-usecase">
-                        <div class="card-usecase-title">Cas d'usage</div>
-                        <p class="card-usecase-text">
-                            Idéal pour préparer la publication de vos épisodes sur Apple Podcasts, Spotify, Deezer ou votre site web.
-                        </p>
-                    </div>
-                    <ul class="card-features">
-                        <li><span class="check-icon">✓</span> Titre optimisé pour le référencement</li>
-                        <li><span class="check-icon">✓</span> Résumé de 5-6 lignes prêt à publier</li>
-                        <li><span class="check-icon">✓</span> Formats acceptés : TXT, PDF, DOCX, ODT</li>
-                        <li><span class="check-icon">✓</span> Possibilité de régénérer avec vos retours</li>
+        <!-- Features -->
+        <section class="features" id="features">
+            <div class="features-grid">
+                <a href="https://titre.thorpodcast.link" class="feature-card">
+                    <div class="feature-icon">📝</div>
+                    <h3>Titre & Résumé</h3>
+                    <span class="feature-badge">À partir du conducteur</span>
+                    <p>Uploadez votre conducteur d'émission et obtenez un titre accrocheur et un résumé prêt à publier.</p>
+                    <ul class="feature-list">
+                        <li>Titre optimisé SEO</li>
+                        <li>Résumé 5-6 lignes</li>
+                        <li>Formats : TXT, PDF, DOCX, ODT</li>
+                        <li>Régénération avec feedback</li>
                     </ul>
-                    <button class="card-button">
-                        Générer un titre & résumé
-                        <span>→</span>
-                    </button>
                 </a>
 
-                <a href="https://web.thorpodcast.link" class="card web" aria-label="Accéder au générateur d'articles web">
-                    <div class="card-header">
-                        <div class="card-icon">📰</div>
-                        <div>
-                            <div class="card-title">Article Web</div>
-                            <span class="card-badge">À partir du MP3</span>
-                        </div>
-                    </div>
-                    <p class="card-description">
-                        Uploadez l'enregistrement MP3 de votre émission et obtenez un article web complet qui reprend les temps forts de votre programme.
-                    </p>
-                    <div class="card-usecase">
-                        <div class="card-usecase-title">Cas d'usage</div>
-                        <p class="card-usecase-text">
-                            Parfait pour alimenter votre blog, enrichir votre SEO et offrir une version écrite à votre audience.
-                        </p>
-                    </div>
-                    <ul class="card-features">
-                        <li><span class="check-icon">✓</span> Transcription automatique de l'audio</li>
-                        <li><span class="check-icon">✓</span> Article structuré de 800-1000 mots</li>
-                        <li><span class="check-icon">✓</span> Fichiers MP3 jusqu'à 500 Mo</li>
-                        <li><span class="check-icon">✓</span> Style éditorial professionnel</li>
+                <a href="https://web.thorpodcast.link" class="feature-card">
+                    <div class="feature-icon">📰</div>
+                    <h3>Article Web</h3>
+                    <span class="feature-badge">À partir du MP3</span>
+                    <p>Uploadez votre enregistrement MP3 et obtenez un article web complet reprenant les temps forts.</p>
+                    <ul class="feature-list">
+                        <li>Transcription automatique</li>
+                        <li>Article 800-1000 mots</li>
+                        <li>Fichiers jusqu'à 500 Mo</li>
+                        <li>Style éditorial pro</li>
                     </ul>
-                    <button class="card-button">
-                        Générer un article web
-                        <span>→</span>
-                    </button>
                 </a>
             </div>
+        </section>
 
-            <section class="how-it-works">
-                <h2>Comment ça marche ?</h2>
-                <div class="steps">
-                    <div class="step">
-                        <div class="step-number">1</div>
-                        <div class="step-title">Uploadez</div>
-                        <p class="step-text">Déposez votre conducteur d'émission ou fichier MP3</p>
-                    </div>
-                    <div class="step">
-                        <div class="step-number">2</div>
-                        <div class="step-title">Patientez</div>
-                        <p class="step-text">Le traitement prend entre 30 secondes et 3 minutes</p>
-                    </div>
-                    <div class="step">
-                        <div class="step-number">3</div>
-                        <div class="step-title">Récupérez</div>
-                        <p class="step-text">Copiez votre contenu prêt à publier</p>
-                    </div>
-                    <div class="step">
-                        <div class="step-number">4</div>
-                        <div class="step-title">Affinez</div>
-                        <p class="step-text">Régénérez si besoin avec vos ajustements</p>
-                    </div>
+        <!-- How it works -->
+        <section class="how-it-works">
+            <h2>Comment ça marche</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h4>Uploadez</h4>
+                    <p>Conducteur ou MP3</p>
                 </div>
-            </section>
-
-            <blockquote class="testimonial">
-                <p class="testimonial-text">
-                    "Un gain de temps considérable pour notre équipe. On génère nos descriptions d'épisodes en quelques clics au lieu d'y passer 30 minutes."
-                </p>
-                <cite class="testimonial-author">— Équipe éditoriale, Radio locale</cite>
-            </blockquote>
-        </main>
-
-        <footer class="footer">
-            <p>&copy; 2025 THOR Podcast — L'outil des radios et podcasteurs</p>
-            <p style="margin-top: 8px; font-size: 13px;">
-                <a href="mailto:contact@thorpodcast.link">Contact</a> ·
-                Fait avec passion pour les créateurs audio
-            </p>
-        </footer>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h4>Patientez</h4>
+                    <p>30 sec à 3 min</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h4>Récupérez</h4>
+                    <p>Contenu prêt à publier</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h4>Affinez</h4>
+                    <p>Régénérez si besoin</p>
+                </div>
+            </div>
+        </section>
     </div>
+
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <h2>Nos offres</h2>
+            <p class="pricing-subtitle">Choisissez la formule adaptée à vos besoins</p>
+
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-name">Découverte</div>
+                    <div class="pricing-price">29€<span>/mois</span></div>
+                    <div class="pricing-credits">100 crédits titre + 10 crédits article</div>
+                    <ul class="pricing-features">
+                        <li>100 titres & résumés / mois</li>
+                        <li>10 articles web / mois</li>
+                        <li>Tous formats acceptés</li>
+                        <li>Régénération illimitée</li>
+                    </ul>
+                    <a href="https://titre.thorpodcast.link" class="pricing-button">Commencer</a>
+                </div>
+
+                <div class="pricing-card popular">
+                    <span class="pricing-badge">Populaire</span>
+                    <div class="pricing-name">Pro</div>
+                    <div class="pricing-price">59€<span>/mois</span></div>
+                    <div class="pricing-credits">500 crédits titre + 40 crédits article</div>
+                    <ul class="pricing-features">
+                        <li>500 titres & résumés / mois</li>
+                        <li>40 articles web / mois</li>
+                        <li>Tous formats acceptés</li>
+                        <li>Régénération illimitée</li>
+                        <li>Support prioritaire</li>
+                    </ul>
+                    <a href="https://titre.thorpodcast.link" class="pricing-button">Commencer</a>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="pricing-name">Entreprise</div>
+                    <div class="pricing-price">Sur mesure</div>
+                    <div class="pricing-credits">Volume personnalisé</div>
+                    <ul class="pricing-features">
+                        <li>Crédits illimités</li>
+                        <li>Multi-utilisateurs</li>
+                        <li>API disponible</li>
+                        <li>Support dédié</li>
+                        <li>Facturation annuelle</li>
+                    </ul>
+                    <a href="mailto:contact@thorpodcast.link" class="pricing-button">Nous contacter</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 THOR Podcast — L'outil des radios et podcasteurs</p>
+        </div>
+    </footer>
 </body>
 </html>
