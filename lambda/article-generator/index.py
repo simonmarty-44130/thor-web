@@ -2,6 +2,7 @@ import json
 import os
 import logging
 from datetime import datetime, timedelta
+from decimal import Decimal
 import time
 
 logger = logging.getLogger()
@@ -12,6 +13,7 @@ ANTHROPIC_API_KEY = os.environ.get('ANTHROPIC_API_KEY')
 JOBS_TABLE = os.environ.get('JOBS_TABLE', 'thor-web-jobs')
 RESULTS_TABLE = os.environ.get('RESULTS_TABLE', 'thor-web-results')
 RESULTS_BUCKET = os.environ.get('RESULTS_BUCKET', 'thor-web-storage')
+SUBSCRIPTIONS_TABLE = os.environ.get('SUBSCRIPTIONS_TABLE', 'thor-subscriptions')
 REGION = 'eu-west-3'
 
 # Import AWS after environment setup
@@ -30,6 +32,56 @@ if ANTHROPIC_API_KEY:
 else:
     claude_client = None
     logger.warning("ANTHROPIC_API_KEY not set - Claude API calls will fail")
+
+
+def check_and_consume_audio_credit(user_id):
+    """
+    Vérifie et consomme 1 crédit audio pour l'utilisateur.
+    Retourne (success, message)
+    """
+    try:
+        subscriptions_table = dynamodb.Table(SUBSCRIPTIONS_TABLE)
+
+        # Récupérer l'abonnement de l'utilisateur
+        response = subscriptions_table.get_item(Key={'userId': user_id})
+
+        if 'Item' not in response:
+            logger.warning(f"User {user_id} not found in subscriptions table")
+            return False, "Aucun abonnement trouvé. Veuillez vous abonner sur thorpodcast.link"
+
+        subscription = response['Item']
+
+        # Vérifier le statut de l'abonnement
+        subscription_status = subscription.get('subscriptionStatus', 'inactive')
+        if subscription_status != 'active':
+            logger.warning(f"User {user_id} subscription is not active: {subscription_status}")
+            return False, "Votre abonnement n'est pas actif. Veuillez renouveler sur thorpodcast.link"
+
+        # Vérifier les crédits audio restants
+        remaining_credits = int(subscription.get('remainingAudioCredits', 0))
+
+        if remaining_credits <= 0:
+            logger.warning(f"User {user_id} has no remaining audio credits")
+            return False, "Crédits audio insuffisants. Veuillez recharger sur thorpodcast.link"
+
+        # Décrémenter le compteur de crédits
+        new_remaining = remaining_credits - 1
+
+        subscriptions_table.update_item(
+            Key={'userId': user_id},
+            UpdateExpression="SET remainingAudioCredits = :new_credits, updatedAt = :timestamp",
+            ExpressionAttributeValues={
+                ':new_credits': new_remaining,
+                ':timestamp': datetime.utcnow().isoformat()
+            }
+        )
+
+        logger.info(f"User {user_id} consumed 1 audio credit. Remaining: {new_remaining}")
+        return True, f"Crédit consommé. Crédits audio restants: {new_remaining}"
+
+    except Exception as e:
+        logger.error(f"Error checking/consuming audio credit for user {user_id}: {str(e)}")
+        return False, f"Erreur lors de la vérification des crédits: {str(e)}"
 
 
 def lambda_handler(event, context):
@@ -58,6 +110,17 @@ def lambda_handler(event, context):
                 raise Exception(f"Job {job_id} not found in database")
 
             job = job_response['Item']
+
+            # Vérifier et consommer 1 crédit audio AVANT la génération
+            credit_success, credit_message = check_and_consume_audio_credit(user_id)
+            if not credit_success:
+                logger.error(f"Credit check failed for user {user_id}: {credit_message}")
+                update_job_status(
+                    job_id=job_id,
+                    status='FAILED',
+                    error=credit_message
+                )
+                continue  # Passer au message suivant sans lever d'exception (ne pas retry)
 
             # Update job status to GENERATING
             update_job_status(job_id, 'GENERATING')
@@ -152,7 +215,7 @@ TYPE D'ARTICLE : Article d'actualité à partir du podcast d'une émission radio
 
 PUBLIC CIBLE : CSP+ 30/60 ans
 
-NOMBRE DE MOTS : 1500
+NOMBRE DE MOTS : 800-1000 (article web concis et percutant)
 
 Votre contenu doit être engageant, captivant et convaincant, avec une fluidité logique, des transitions naturelles et un ton spontané. L'objectif est de trouver un équilibre entre précision technique et proximité émotionnelle. Si vous faites une citation pensez à donner le prénom et le nom et pas uniquement le nom de famille.
 
@@ -217,8 +280,8 @@ Rédigez maintenant l'article en suivant toutes les directives ci-dessus."""
 
             # Call Claude API
             response = claude_client.messages.create(
-                model="claude-3-5-sonnet-20241022",
-                max_tokens=4000,
+                model="claude-sonnet-4-5-20250929",
+                max_tokens=6000,
                 temperature=0.7,
                 messages=[
                     {
