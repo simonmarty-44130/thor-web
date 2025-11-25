@@ -656,6 +656,66 @@
             color: white;
         }
 
+        /* MonFSER Banner */
+        .monfser-banner {
+            padding: 48px 0;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+        }
+
+        .monfser-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 32px;
+        }
+
+        .monfser-text {
+            flex: 1;
+        }
+
+        .monfser-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .monfser-text h3 {
+            font-size: 24px;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .monfser-text p {
+            font-size: 15px;
+            color: rgba(255,255,255,0.85);
+            line-height: 1.5;
+            max-width: 550px;
+        }
+
+        .monfser-button {
+            flex-shrink: 0;
+            padding: 14px 28px;
+            background: white;
+            color: #1e40af;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .monfser-button:hover {
+            background: #f0f9ff;
+            transform: translateY(-1px);
+        }
+
         /* Footer */
         .footer {
             padding: 32px 0;
@@ -714,6 +774,15 @@
         @media (max-width: 480px) {
             .benefits-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .monfser-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .monfser-text p {
+                max-width: none;
             }
         }
     </style>
@@ -936,10 +1005,24 @@
         </div>
     </section>
 
+    <!-- MonFSER Banner -->
+    <section class="monfser-banner">
+        <div class="container">
+            <div class="monfser-content">
+                <div class="monfser-text">
+                    <span class="monfser-badge">Pour les radios associatives</span>
+                    <h3>Simplifiez vos démarches FSER avec MonFSER</h3>
+                    <p>Analyse automatique de vos sources documentaires, génération d'attestations et suivi de vos obligations réglementaires. L'outil pensé pour les radios associatives.</p>
+                </div>
+                <a href="https://www.monfser.fr" target="_blank" class="monfser-button">Découvrir MonFSER →</a>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>© 2025 Thor Podcast — L'outil des radios et podcasteurs</p>
+            <p>© 2025 Thor Podcast — L'outil des radios et podcasteurs — Une solution Première Pierre Média</p>
         </div>
     </footer>
 
