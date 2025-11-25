@@ -1,66 +1,48 @@
 # Dependencies
 node_modules/
-package-lock.json
+frontend/node_modules/
 
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-env/
-venv/
-ENV/
-*.egg-info/
+# Lambda dependencies (trop volumineux pour GitHub)
+lambda/*/node_modules/
+lambda/*/*.pyc
+lambda/*/__pycache__/
+lambda/article-generator/anthropic*/
+lambda/article-generator/urllib3*/
+lambda/article-generator/boto3*/
+lambda/article-generator/botocore*/
+lambda/article-generator/certifi*/
+lambda/article-generator/distro*/
+lambda/article-generator/h11*/
+lambda/article-generator/httpcore*/
+lambda/article-generator/httpx*/
+lambda/article-generator/idna*/
+lambda/article-generator/jiter*/
+lambda/article-generator/pydantic*/
+lambda/article-generator/sniffio*/
+lambda/article-generator/typing_extensions*/
+lambda/article-generator/anyio*/
+lambda/article-generator/docstring_parser*/
+
+# Build
+frontend/build/
 dist/
-build/
+*.zip
 
-# Environment files
+# Environment
 .env
 .env.local
 .env.production
+*.pem
 
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
-*~
-
-# OS
 .DS_Store
-Thumbs.db
-
-# Build outputs
-frontend/build/
-frontend/dist/
-*.zip
 
 # Logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
-# AWS
-*.pem
-.aws/
-
-# Temporary files
-/tmp/
-*.tmp
-*.bak
-
-# Coverage
-coverage/
-.nyc_output/
-
-# Terraform (si utilisé plus tard)
-*.tfstate
-*.tfstate.backup
-.terraform/
-
-# Secrets
-*.key
-*secret*
-*credentials*

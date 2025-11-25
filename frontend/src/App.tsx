@@ -11,20 +11,73 @@ function App() {
   const [user, setUser] = useState<any>(null);
   const [currentJob, setCurrentJob] = useState<JobStatus | null>(null);
   const [pollingInterval, setPollingInterval] = useState<NodeJS.Timeout | null>(null);
+  const [jobHistory, setJobHistory] = useState<JobStatus[]>([]);
+  const [loadingHistory, setLoadingHistory] = useState(false);
+  const [hasAccess, setHasAccess] = useState(true);
+
+  // Check if user has access to this tool based on Cognito groups
+  const checkUserAccess = (userInfo: any): boolean => {
+    if (!userInfo) return false;
+
+    const userGroups = userInfo['cognito:groups'] || [];
+
+    // all-access group has access to everything
+    if (userGroups.includes('all-access')) {
+      return true;
+    }
+
+    // web-only group has access to web tool
+    if (userGroups.includes('web-only')) {
+      return true;
+    }
+
+    // If user has no groups, grant access by default (backwards compatibility)
+    if (userGroups.length === 0) {
+      return true;
+    }
+
+    return false;
+  };
+
+  // Load job history when authenticated
+  const loadJobHistory = async () => {
+    setLoadingHistory(true);
+    try {
+      const jobs = await apiService.getUserJobs(10);
+      // Filter to show only completed jobs
+      const completedJobs = jobs.filter(job => job.status === 'COMPLETED');
+      setJobHistory(completedJobs);
+    } catch (error) {
+      console.error('Error loading job history:', error);
+    } finally {
+      setLoadingHistory(false);
+    }
+  };
 
   useEffect(() => {
     // Check if returning from Cognito login
     if (window.location.hash) {
       const success = authService.handleCallback();
       if (success) {
+        const userInfo = authService.getUser();
         setIsAuthenticated(true);
-        setUser(authService.getUser());
+        setUser(userInfo);
+        setHasAccess(checkUserAccess(userInfo));
       }
     } else if (authService.isAuthenticated()) {
+      const userInfo = authService.getUser();
       setIsAuthenticated(true);
-      setUser(authService.getUser());
+      setUser(userInfo);
+      setHasAccess(checkUserAccess(userInfo));
     }
   }, []);
+
+  // Load history when authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      loadJobHistory();
+    }
+  }, [isAuthenticated]);
 
   // Poll job status when we have a current job that's not completed
   useEffect(() => {
@@ -56,8 +109,8 @@ function App() {
     }
   }, [currentJob?.job_id, currentJob?.status]);
 
-  const handleLogin = () => {
-    authService.login();
+  const handleLogin = (pool: 'demo' | 'saint-esprit' = 'demo') => {
+    authService.login(pool);
   };
 
   const handleLogout = () => {
@@ -79,6 +132,17 @@ function App() {
     };
 
     setCurrentJob(initialJob);
+    // Refresh history
+    loadJobHistory();
+  };
+
+  const handleSelectJob = async (jobId: string) => {
+    try {
+      const job = await apiService.getJobStatus(jobId);
+      setCurrentJob(job);
+    } catch (error) {
+      console.error('Error loading job:', error);
+    }
   };
 
   const formatDate = (dateString: string) => {
@@ -159,8 +223,37 @@ function App() {
                 <span>Génération d'article par IA</span>
               </div>
             </div>
-            <button onClick={handleLogin} className="login-button">
-              Se connecter
+            <div className="login-buttons">
+              <button onClick={() => handleLogin('demo')} className="login-button demo-button">
+                Connexion Demo
+              </button>
+              <button onClick={() => handleLogin('saint-esprit')} className="login-button saint-esprit-button">
+                Connexion Saint-Esprit
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show access denied if user doesn't have permission
+  if (!hasAccess) {
+    return (
+      <div className="app">
+        <div className="login-container">
+          <div className="login-card">
+            <div className="logo">
+              <h1 className="logo-text" style={{background: 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)'}}>ACCÈS REFUSÉ</h1>
+            </div>
+            <p className="description" style={{color: '#64748b', marginBottom: '24px'}}>
+              Votre compte n'a pas les permissions nécessaires pour accéder à cet outil.
+            </p>
+            <p style={{color: '#94a3b8', fontSize: '14px', marginBottom: '24px'}}>
+              Connecté en tant que : <strong>{user?.email || user?.username}</strong>
+            </p>
+            <button onClick={handleLogout} className="login-button" style={{background: '#dc2626'}}>
+              Se déconnecter
             </button>
           </div>
         </div>
@@ -173,12 +266,33 @@ function App() {
       <header className="app-header">
         <div className="header-content">
           <div className="header-left">
-            <h1 className="header-logo">THOR WEB</h1>
+            <a href="https://thorpodcast.link/login.html" style={{textDecoration: 'none', display: 'flex', alignItems: 'center'}}>
+              <img src="/thor-logo.png" alt="Thor Podcast" style={{height: '40px', width: 'auto'}} />
+            </a>
+            <nav className="header-nav">
+              <a href="https://thorpodcast.link/login.html" className="nav-link">
+                <User size={16} />
+                Accueil
+              </a>
+              <a href="https://titre.thorpodcast.link" className="nav-link">
+                <FileText size={16} />
+                Titre & Résumé
+              </a>
+              <a href="https://web.thorpodcast.link" className="nav-link active">
+                <FileText size={16} />
+                Article Web
+              </a>
+            </nav>
           </div>
           <div className="header-right">
             <div className="user-info">
               <User size={20} />
               <span>{user?.email || user?.username || 'Utilisateur'}</span>
+              {(user?.['custom:group'] || user?.['cognito:groups']?.[0]) && (
+                <span className="user-group">
+                  {user?.['custom:group'] || user?.['cognito:groups']?.[0]}
+                </span>
+              )}
             </div>
             <button onClick={handleLogout} className="logout-button">
               <LogOut size={20} />
@@ -194,6 +308,43 @@ function App() {
             <h2>Nouveau fichier MP3</h2>
             <FileUploader onUploadComplete={handleUploadComplete} />
           </section>
+
+          {/* Job History */}
+          {jobHistory.length > 0 && (
+            <section className="history-section">
+              <h2>Historique des traitements</h2>
+              <div className="history-list">
+                {loadingHistory ? (
+                  <div className="loading-history">
+                    <Loader className="spinner" size={20} />
+                    <span>Chargement...</span>
+                  </div>
+                ) : (
+                  jobHistory.map((job) => (
+                    <div
+                      key={job.job_id}
+                      className={`history-item ${currentJob?.job_id === job.job_id ? 'selected' : ''}`}
+                      onClick={() => handleSelectJob(job.job_id)}
+                    >
+                      <div className="history-item-header">
+                        <FileText size={16} />
+                        <span className="history-filename">{job.file_name}</span>
+                      </div>
+                      <div className="history-item-meta">
+                        <div
+                          className="history-status"
+                          style={{ color: getStatusDisplay(job.status).color }}
+                        >
+                          {getStatusDisplay(job.status).icon}
+                        </div>
+                        <span className="history-date">{formatDate(job.created_at)}</span>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </section>
+          )}
 
           {/* Current Job Status */}
           {currentJob && (
@@ -229,34 +380,28 @@ function App() {
                 {/* Display article when completed */}
                 {currentJob.status === 'COMPLETED' && currentJob.result && (
                   <div className="article-result">
-                    <div className="article-section">
+                    {currentJob.result.titre && (
                       <h3 className="article-title">{currentJob.result.titre}</h3>
+                    )}
+                    <div className="article-content">
+                      {currentJob.result.article.split('\n').map((line, idx) => {
+                        const trimmedLine = line.trim();
+                        if (!trimmedLine) return null;
+
+                        // Handle markdown headers
+                        if (trimmedLine.startsWith('### ')) {
+                          return <h4 key={idx} className="article-h4">{trimmedLine.substring(4)}</h4>;
+                        }
+                        if (trimmedLine.startsWith('## ')) {
+                          return <h3 key={idx} className="article-h3">{trimmedLine.substring(3)}</h3>;
+                        }
+                        if (trimmedLine.startsWith('# ')) {
+                          return null; // Skip main title as we display it above
+                        }
+
+                        return <p key={idx} className="article-paragraph">{trimmedLine}</p>;
+                      })}
                     </div>
-
-                    {currentJob.result.introduction && (
-                      <div className="article-section">
-                        <h4>Introduction</h4>
-                        <p className="article-text">{currentJob.result.introduction}</p>
-                      </div>
-                    )}
-
-                    {currentJob.result.article && (
-                      <div className="article-section">
-                        <h4>Article</h4>
-                        <div className="article-text">
-                          {currentJob.result.article.split('\n').map((paragraph, idx) => (
-                            paragraph.trim() && <p key={idx}>{paragraph}</p>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {currentJob.result.conclusion && (
-                      <div className="article-section">
-                        <h4>Conclusion</h4>
-                        <p className="article-text">{currentJob.result.conclusion}</p>
-                      </div>
-                    )}
                   </div>
                 )}
               </div>
@@ -264,6 +409,10 @@ function App() {
           )}
         </div>
       </main>
+
+      <footer className="app-footer">
+        <p>Thor Podcast v{config.app.version} © 2025 Premiere Pierre Media</p>
+      </footer>
     </div>
   );
 }

@@ -7,7 +7,9 @@ import { config } from '../config';
  */
 class AuthService {
   private accessToken: string | null = null;
+  private idToken: string | null = null;
   private user: any = null;
+  private currentPool: 'demo' | 'saint-esprit' = 'demo';
 
   constructor() {
     // Load token from localStorage on init
@@ -17,10 +19,17 @@ class AuthService {
   /**
    * Redirect to Cognito login page
    */
-  login(): void {
-    const { userPoolId, clientId, domain, redirectUri, responseType } = config.cognito;
+  login(pool: 'demo' | 'saint-esprit' = 'demo'): void {
+    this.currentPool = pool;
+    localStorage.setItem('thor_web_pool', pool);
 
-    const loginUrl = `https://${domain}.auth.${config.cognito.region}.amazoncognito.com/login?` +
+    const cognitoConfig = pool === 'saint-esprit'
+      ? config.saintEspritCognito
+      : config.cognito;
+
+    const { clientId, domain, redirectUri, responseType } = cognitoConfig;
+
+    const loginUrl = `https://${domain}.auth.${cognitoConfig.region}.amazoncognito.com/login?` +
       `client_id=${clientId}&` +
       `response_type=${responseType}&` +
       `redirect_uri=${encodeURIComponent(redirectUri)}`;
@@ -40,6 +49,7 @@ class AuthService {
 
     if (accessToken && idToken) {
       this.accessToken = accessToken;
+      this.idToken = idToken;
 
       // Decode JWT to get user info (simple base64 decode, not verification)
       const payload = this.decodeJWT(idToken);
@@ -62,8 +72,10 @@ class AuthService {
    */
   logout(): void {
     this.accessToken = null;
+    this.idToken = null;
     this.user = null;
     localStorage.removeItem('thor_web_token');
+    localStorage.removeItem('thor_web_id_token');
     localStorage.removeItem('thor_web_user');
 
     // Redirect to home
@@ -74,13 +86,20 @@ class AuthService {
    * Check if user is authenticated
    */
   isAuthenticated(): boolean {
-    return this.accessToken !== null;
+    return this.idToken !== null;
+  }
+
+  /**
+   * Get ID token (for API Gateway Cognito authorizer)
+   */
+  getToken(): string | null {
+    return this.idToken;
   }
 
   /**
    * Get access token
    */
-  getToken(): string | null {
+  getAccessToken(): string | null {
     return this.accessToken;
   }
 
@@ -117,6 +136,9 @@ class AuthService {
     if (this.accessToken) {
       localStorage.setItem('thor_web_token', this.accessToken);
     }
+    if (this.idToken) {
+      localStorage.setItem('thor_web_id_token', this.idToken);
+    }
     if (this.user) {
       localStorage.setItem('thor_web_user', JSON.stringify(this.user));
     }
@@ -127,10 +149,15 @@ class AuthService {
    */
   private loadFromStorage(): void {
     const token = localStorage.getItem('thor_web_token');
+    const idToken = localStorage.getItem('thor_web_id_token');
     const user = localStorage.getItem('thor_web_user');
+    const pool = localStorage.getItem('thor_web_pool') as 'demo' | 'saint-esprit' | null;
 
     if (token) {
       this.accessToken = token;
+    }
+    if (idToken) {
+      this.idToken = idToken;
     }
     if (user) {
       try {
@@ -139,6 +166,16 @@ class AuthService {
         console.error('Error parsing user from storage:', error);
       }
     }
+    if (pool) {
+      this.currentPool = pool;
+    }
+  }
+
+  /**
+   * Get current pool
+   */
+  getCurrentPool(): 'demo' | 'saint-esprit' {
+    return this.currentPool;
   }
 }
 

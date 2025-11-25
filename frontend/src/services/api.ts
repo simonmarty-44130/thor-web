@@ -31,43 +31,76 @@ export interface JobStatus {
 
 class ApiService {
   private baseUrl: string;
+  private uploadBaseUrl: string;
 
   constructor() {
-    this.baseUrl = config.api.endpoint;
+    this.baseUrl = config.api.endpoint; // For subscription/billing
+    this.uploadBaseUrl = config.api.uploadEndpoint; // For upload/jobs
   }
 
   /**
-   * Upload MP3 file
+   * Upload MP3 file using presigned URL (3-step process)
    */
   async uploadFile(file: File): Promise<UploadResponse> {
-    // Convert file to base64
-    const base64 = await this.fileToBase64(file);
-
-    const response = await fetch(`${this.baseUrl}/upload`, {
+    // Step 1: Get presigned URL
+    const initResponse = await fetch(`${this.uploadBaseUrl}/upload/init`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${authService.getToken()}`
       },
       body: JSON.stringify({
-        file: base64,
-        filename: file.name
+        filename: file.name,
+        fileSize: file.size
       })
     });
 
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Upload failed');
+    if (!initResponse.ok) {
+      const error = await initResponse.json();
+      throw new Error(error.error || 'Failed to initialize upload');
     }
 
-    return response.json();
+    const initData = await initResponse.json();
+    const { upload_url, job_id } = initData;
+
+    // Step 2: Upload directly to S3 using presigned URL
+    const uploadResponse = await fetch(upload_url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'audio/mpeg'
+      },
+      body: file
+    });
+
+    if (!uploadResponse.ok) {
+      throw new Error(`S3 upload failed: ${uploadResponse.status}`);
+    }
+
+    // Step 3: Start transcription
+    const startResponse = await fetch(`${this.uploadBaseUrl}/upload/start`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authService.getToken()}`
+      },
+      body: JSON.stringify({
+        job_id: job_id
+      })
+    });
+
+    if (!startResponse.ok) {
+      const error = await startResponse.json();
+      throw new Error(error.error || 'Failed to start transcription');
+    }
+
+    return startResponse.json();
   }
 
   /**
    * Get job status
    */
   async getJobStatus(jobId: string): Promise<JobStatus> {
-    const response = await fetch(`${this.baseUrl}/jobs/${jobId}`, {
+    const response = await fetch(`${this.uploadBaseUrl}/jobs/${jobId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -87,7 +120,7 @@ class ApiService {
    * Get user's recent jobs
    */
   async getUserJobs(limit: number = 10): Promise<JobStatus[]> {
-    const response = await fetch(`${this.baseUrl}/jobs?limit=${limit}`, {
+    const response = await fetch(`${this.uploadBaseUrl}/jobs?limit=${limit}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -102,23 +135,6 @@ class ApiService {
 
     const data = await response.json();
     return data.jobs || [];
-  }
-
-  /**
-   * Convert file to base64
-   */
-  private fileToBase64(file: File): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        const result = reader.result as string;
-        // Remove data:audio/mpeg;base64, prefix
-        const base64 = result.split(',')[1];
-        resolve(base64);
-      };
-      reader.onerror = error => reject(error);
-    });
   }
 }
 
