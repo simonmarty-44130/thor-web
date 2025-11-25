@@ -5,17 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- SEO Meta Tags -->
-    <title>THOR Podcast | Générateur de titres et articles pour radios et podcasts</title>
-    <meta name="description" content="Outil professionnel pour radios et podcasteurs : générez automatiquement titres, résumés et articles web à partir de vos conducteurs d'émission ou fichiers audio MP3.">
-    <meta name="keywords" content="générateur titre podcast, résumé épisode radio, transcription podcast, article web podcast, outil radio, automatiser description podcast, conducteur émission">
-    <meta name="author" content="THOR Podcast">
+    <title>Thor Podcast : Transformez vos podcasts en contenu web automatiquement</title>
+    <meta name="description" content="Thor Podcast automatise la création de contenu pour les radios et podcasteurs : génération de titres et résumés avant diffusion, transformation de vos MP3 en articles web enrichis. Gagnez du temps, valorisez vos émissions.">
+    <meta name="keywords" content="génération automatique podcast, création contenu radio IA, transcription podcast en article, outil podcast professionnel, automatisation production podcast, article web depuis audio, métadonnées podcast automatiques, générateur titre podcast, résumé épisode radio">
+    <meta name="author" content="Thor Podcast">
     <meta name="robots" content="index, follow">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://thorpodcast.link/">
-    <meta property="og:title" content="THOR Podcast | Générateur de contenus pour radios et podcasts">
-    <meta property="og:description" content="Gagnez du temps : générez titres, résumés et articles web automatiquement à partir de vos émissions.">
+    <meta property="og:title" content="Thor Podcast : Transformez vos podcasts en contenu web automatiquement">
+    <meta property="og:description" content="L'outil IA qui génère titres, résumés et articles web pour valoriser vos émissions radio et podcasts en quelques clics.">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Thor Podcast : Transformez vos podcasts en contenu web automatiquement">
+    <meta name="twitter:description" content="L'outil IA qui génère titres, résumés et articles web pour valoriser vos émissions radio et podcasts.">
 
     <!-- Canonical URL -->
     <link rel="canonical" href="https://thorpodcast.link/">
@@ -61,10 +66,6 @@
             gap: 10px;
         }
 
-        .nav-logo span {
-            font-size: 22px;
-        }
-
         .nav-button {
             padding: 10px 20px;
             background: #1e3a5f;
@@ -103,10 +104,19 @@
             line-height: 1.2;
         }
 
+        .hero-subtitle {
+            font-size: 20px;
+            color: #1e3a5f;
+            max-width: 700px;
+            margin: 0 auto 16px;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
         .hero p {
-            font-size: 19px;
+            font-size: 17px;
             color: #64748b;
-            max-width: 600px;
+            max-width: 650px;
             margin: 0 auto 32px;
             line-height: 1.6;
         }
@@ -153,9 +163,49 @@
             background: #f1f5f9;
         }
 
+        /* Problem Section */
+        .problem-section {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 60px;
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .problem-section h2 {
+            font-size: 28px;
+            color: #1e293b;
+            margin-bottom: 16px;
+        }
+
+        .problem-section p {
+            font-size: 17px;
+            color: #64748b;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
         /* Features */
         .features {
-            padding: 60px 0;
+            padding: 40px 0 60px;
+        }
+
+        .features-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .features-header h2 {
+            font-size: 32px;
+            color: #1e293b;
+            margin-bottom: 12px;
+        }
+
+        .features-header p {
+            font-size: 17px;
+            color: #64748b;
         }
 
         .features-grid {
@@ -211,6 +261,7 @@
 
         .feature-list {
             list-style: none;
+            margin-bottom: 16px;
         }
 
         .feature-list li {
@@ -228,11 +279,112 @@
             font-weight: 600;
         }
 
+        .feature-benefit {
+            background: #f0fdf4;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 14px;
+            color: #166534;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Benefits Section */
+        .benefits {
+            padding: 60px 0;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .benefits h2 {
+            text-align: center;
+            font-size: 28px;
+            color: #1e293b;
+            margin-bottom: 40px;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .benefit-item {
+            text-align: center;
+            padding: 24px 16px;
+        }
+
+        .benefit-icon {
+            font-size: 36px;
+            margin-bottom: 12px;
+        }
+
+        .benefit-item h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .benefit-item p {
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        /* How it works */
+        .how-it-works {
+            padding: 60px 0;
+        }
+
+        .how-it-works h2 {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 40px;
+        }
+
+        .steps {
+            display: flex;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: #1e3a5f;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin: 0 auto 12px;
+        }
+
+        .step h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .step p {
+            font-size: 14px;
+            color: #64748b;
+        }
+
         /* Pricing */
         .pricing {
             padding: 80px 0;
-            background: white;
-            border-top: 1px solid #e2e8f0;
+            background: #f8fafc;
         }
 
         .pricing h2 {
@@ -258,17 +410,16 @@
         }
 
         .pricing-card {
-            background: #f8fafc;
+            background: white;
             border-radius: 12px;
             padding: 32px 24px;
             text-align: center;
-            border: 2px solid transparent;
+            border: 2px solid #e2e8f0;
             transition: all 0.2s;
         }
 
         .pricing-card.popular {
             border-color: #1e3a5f;
-            background: white;
             transform: scale(1.02);
         }
 
@@ -359,53 +510,6 @@
             background: #f1f5f9;
         }
 
-        /* How it works */
-        .how-it-works {
-            padding: 60px 0;
-        }
-
-        .how-it-works h2 {
-            text-align: center;
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 40px;
-        }
-
-        .steps {
-            display: flex;
-            justify-content: space-between;
-            gap: 24px;
-        }
-
-        .step {
-            flex: 1;
-            text-align: center;
-        }
-
-        .step-number {
-            width: 40px;
-            height: 40px;
-            background: #1e3a5f;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            margin: 0 auto 12px;
-        }
-
-        .step h4 {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
-
-        .step p {
-            font-size: 14px;
-            color: #64748b;
-        }
-
         /* Footer */
         .footer {
             padding: 32px 0;
@@ -413,6 +517,7 @@
             border-top: 1px solid #e2e8f0;
             color: #64748b;
             font-size: 14px;
+            background: white;
         }
 
         /* Responsive */
@@ -421,12 +526,20 @@
                 font-size: 32px;
             }
 
+            .hero-subtitle {
+                font-size: 18px;
+            }
+
             .hero p {
-                font-size: 17px;
+                font-size: 16px;
             }
 
             .features-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .benefits-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
 
             .pricing-grid {
@@ -446,6 +559,16 @@
                 flex-direction: column;
                 align-items: center;
             }
+
+            .problem-section {
+                padding: 32px 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -453,7 +576,7 @@
     <!-- Navigation -->
     <nav class="nav">
         <a href="/" class="nav-logo">
-            <img src="/thor-logo.png" alt="THOR Podcast" style="height: 40px; width: auto;">
+            <img src="/thor-logo.png" alt="Thor Podcast" style="height: 40px; width: auto;">
         </a>
         <a href="/login.html" class="nav-button">S'identifier</a>
     </nav>
@@ -461,41 +584,59 @@
     <div class="container">
         <!-- Hero -->
         <section class="hero">
-            <h1>Créez vos contenus podcast en quelques clics</h1>
-            <p>Générez automatiquement titres, résumés et articles web à partir de vos conducteurs d'émission ou fichiers audio.</p>
+            <h1>Transformez vos podcasts en contenu web automatiquement</h1>
+            <p class="hero-subtitle">L'outil IA qui génère titres, résumés et articles web pour valoriser vos émissions radio et podcasts en quelques clics</p>
+            <p>Thor Podcast libère les équipes web des tâches répétitives de production de contenu. Enrichissez automatiquement vos émissions avec des métadonnées professionnelles et des articles web engageants.</p>
             <div class="hero-cta">
                 <a href="#pricing" class="btn-primary">Voir les offres</a>
                 <a href="#features" class="btn-secondary">Découvrir</a>
             </div>
         </section>
 
+        <!-- Problem Section -->
+        <div class="problem-section">
+            <h2>Arrêtez de courir après vos journalistes pour obtenir titres et résumés</h2>
+            <p>Grâce à l'intelligence artificielle, générez automatiquement les métadonnées de vos émissions et doublez la portée de chaque programme sans effort supplémentaire.</p>
+        </div>
+
         <!-- Features -->
         <section class="features" id="features">
+            <div class="features-header">
+                <h2>Les 2 fonctionnalités clés</h2>
+                <p>Avant ou après la diffusion, Thor Podcast vous accompagne</p>
+            </div>
+
             <div class="features-grid">
                 <a href="https://titre.thorpodcast.link" class="feature-card">
-                    <div class="feature-icon">📝</div>
-                    <h3>Titre & Résumé</h3>
+                    <div class="feature-icon">🎯</div>
+                    <h3>Avant la diffusion : Titres et résumés instantanés</h3>
                     <span class="feature-badge">À partir du conducteur</span>
-                    <p>Uploadez votre conducteur d'émission et obtenez un titre accrocheur et un résumé prêt à publier.</p>
+                    <p>À partir du conducteur d'émission ou des questions de l'animateur, Thor Podcast génère automatiquement vos contenus.</p>
                     <ul class="feature-list">
-                        <li>Titre optimisé SEO</li>
-                        <li>Résumé 5-6 lignes</li>
+                        <li>Titres optimisés pour le web et apps podcast</li>
+                        <li>Résumés percutants prêts à publier</li>
+                        <li>Métadonnées enrichies (iTunes, Spotify, Deezer)</li>
                         <li>Formats : TXT, PDF, DOCX, ODT</li>
-                        <li>Régénération avec feedback</li>
                     </ul>
+                    <div class="feature-benefit">
+                        ✨ Vos contenus sont prêts avant même la fin de l'émission
+                    </div>
                 </a>
 
                 <a href="https://web.thorpodcast.link" class="feature-card">
-                    <div class="feature-icon">📰</div>
-                    <h3>Article Web</h3>
+                    <div class="feature-icon">📝</div>
+                    <h3>Après la diffusion : Articles web depuis vos MP3</h3>
                     <span class="feature-badge">À partir du MP3</span>
-                    <p>Uploadez votre enregistrement MP3 et obtenez un article web complet reprenant les temps forts.</p>
+                    <p>Déposez votre fichier audio et Thor Podcast crée un article web complet qui valorise votre émission.</p>
                     <ul class="feature-list">
-                        <li>Transcription automatique</li>
-                        <li>Article 800-1000 mots</li>
-                        <li>Fichiers jusqu'à 500 Mo</li>
-                        <li>Style éditorial pro</li>
+                        <li>Exploite la matière première de votre émission</li>
+                        <li>Met en valeur citations et échanges marquants</li>
+                        <li>Structure le contenu pour l'engagement</li>
+                        <li>Optimise le référencement SEO</li>
                     </ul>
+                    <div class="feature-benefit">
+                        ✨ Doublez la portée de chaque émission sans effort
+                    </div>
                 </a>
             </div>
         </section>
@@ -527,6 +668,35 @@
             </div>
         </section>
     </div>
+
+    <!-- Benefits Section -->
+    <section class="benefits">
+        <div class="container">
+            <h2>Pourquoi les radios et podcasteurs choisissent Thor Podcast</h2>
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <div class="benefit-icon">⏱️</div>
+                    <h4>Gain de temps radical</h4>
+                    <p>Fini les allers-retours avec les journalistes. Titres et résumés générés en quelques secondes.</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">📈</div>
+                    <h4>Valorisation du contenu</h4>
+                    <p>Chaque émission devient aussi un article web qui améliore votre SEO et touche de nouveaux auditeurs.</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🎙️</div>
+                    <h4>Respect du ton éditorial</h4>
+                    <p>L'IA s'appuie sur le contenu réel de vos émissions : citations authentiques, échanges fidèles.</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🚀</div>
+                    <h4>Diffusion accélérée</h4>
+                    <p>Publiez sur toutes vos plateformes avec des métadonnées déjà optimisées.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Pricing -->
     <section class="pricing" id="pricing">
@@ -583,7 +753,7 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>© 2025 THOR Podcast — L'outil des radios et podcasteurs</p>
+            <p>© 2025 Thor Podcast — L'outil des radios et podcasteurs</p>
         </div>
     </footer>
 
