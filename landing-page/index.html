@@ -576,6 +576,86 @@
             background: #f1f5f9;
         }
 
+        /* Custom Offer */
+        .custom-offer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 32px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .custom-offer p {
+            font-size: 16px;
+            color: #64748b;
+        }
+
+        .custom-offer a {
+            color: #1e3a5f;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .custom-offer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            padding: 60px 0;
+            background: white;
+        }
+
+        .contact-card {
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 40px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .contact-card h3 {
+            font-size: 24px;
+            color: #1e293b;
+            margin-bottom: 24px;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .contact-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .contact-company {
+            font-size: 15px;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+
+        .contact-phone {
+            display: inline-block;
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e3a5f;
+            text-decoration: none;
+            padding: 12px 24px;
+            background: #e8f4fd;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .contact-phone:hover {
+            background: #1e3a5f;
+            color: white;
+        }
+
         /* Footer */
         .footer {
             padding: 32px 0;
@@ -832,6 +912,25 @@
                         <li>Support dédié</li>
                     </ul>
                     <a href="#" onclick="selectPlan('premium')" class="pricing-button">Commencer</a>
+                </div>
+            </div>
+
+            <!-- Custom offer -->
+            <div class="custom-offer">
+                <p>Vous avez des besoins spécifiques ? <a href="#contact">Demandez une offre sur mesure</a></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section" id="contact">
+        <div class="container">
+            <div class="contact-card">
+                <h3>Renseignements</h3>
+                <div class="contact-info">
+                    <p class="contact-name">M. MARTY</p>
+                    <p class="contact-company">Première Pierre Média</p>
+                    <a href="tel:+33672674512" class="contact-phone">📞 06.72.67.45.12</a>
                 </div>
             </div>
         </div>
