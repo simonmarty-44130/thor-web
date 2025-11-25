@@ -203,8 +203,9 @@ function App() {
         <div className="login-container">
           <div className="login-card">
             <div className="logo">
-              <h1 className="logo-text">THOR WEB</h1>
+              <img src="/thor-logo.png" alt="THOR Podcast" />
             </div>
+            <h1 style={{color: '#1e293b', fontSize: '24px', marginBottom: '8px'}}>Article Web</h1>
             <p className="version">Version {config.app.version}</p>
             <p className="description">
               {config.app.description}
@@ -223,14 +224,9 @@ function App() {
                 <span>Génération d'article par IA</span>
               </div>
             </div>
-            <div className="login-buttons">
-              <button onClick={() => handleLogin('demo')} className="login-button demo-button">
-                Connexion Demo
-              </button>
-              <button onClick={() => handleLogin('saint-esprit')} className="login-button saint-esprit-button">
-                Connexion Saint-Esprit
-              </button>
-            </div>
+            <button onClick={() => handleLogin('demo')} className="login-button">
+              Se connecter
+            </button>
           </div>
         </div>
       </div>
@@ -244,8 +240,9 @@ function App() {
         <div className="login-container">
           <div className="login-card">
             <div className="logo">
-              <h1 className="logo-text" style={{background: 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)'}}>ACCÈS REFUSÉ</h1>
+              <img src="/thor-logo.png" alt="THOR Podcast" />
             </div>
+            <h1 style={{color: '#dc2626', fontSize: '24px', marginBottom: '16px'}}>Accès non autorisé</h1>
             <p className="description" style={{color: '#64748b', marginBottom: '24px'}}>
               Votre compte n'a pas les permissions nécessaires pour accéder à cet outil.
             </p>
