@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="THOR Podcast - Connexion">
+    <title>Connexion - THOR Podcast</title>
+    <script src="https://cdn.jsdelivr.net/npm/amazon-cognito-identity-js@6.3.6/dist/amazon-cognito-identity.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            background: #f8fafc;
+            color: #1e293b;
+        }
+
+        /* Navigation */
+        .nav {
+            background: white;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .nav-logo img {
+            height: 40px;
+            width: auto;
+        }
+
+        .nav-link {
+            color: #64748b;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: #1e3a5f;
+        }
+
+        /* Container */
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .logo img {
+            height: 60px;
+            width: auto;
+        }
+
+        h1 {
+            color: #1e293b;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 15px;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        /* Login State */
+        .login-state {
+            display: block;
+        }
+
+        .login-state.hidden {
+            display: none;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 14px 28px;
+            background: #1e3a5f;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .login-button:hover {
+            background: #2d5a87;
+            transform: translateY(-1px);
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .register-link a {
+            color: #1e3a5f;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Dashboard State */
+        .dashboard-state {
+            display: none;
+        }
+
+        .dashboard-state.show {
+            display: block;
+        }
+
+        .user-info {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .user-email {
+            color: #1e293b;
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 16px;
+        }
+
+        .credits-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .credit-box {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .credit-label {
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .credit-value {
+            color: #1e3a5f;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .app-cards {
+            display: grid;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .app-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .app-card:hover {
+            border-color: #1e3a5f;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .app-card-icon {
+            font-size: 36px;
+            flex-shrink: 0;
+        }
+
+        .app-card-content {
+            flex: 1;
+        }
+
+        .app-card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .app-card-description {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .logout-button {
+            background: transparent;
+            border: 1px solid #dc2626;
+            border-radius: 8px;
+            color: #dc2626;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 10px 20px;
+            transition: all 0.2s;
+        }
+
+        .logout-button:hover {
+            background: #dc2626;
+            color: white;
+        }
+
+        .loading {
+            text-align: center;
+            color: #64748b;
+            font-size: 15px;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 3px solid #e2e8f0;
+            border-top: 3px solid #1e3a5f;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            color: #dc2626;
+            padding: 12px;
+            margin-top: 16px;
+            font-size: 14px;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 24px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 40px 16px;
+            }
+            .card {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <a href="/" class="nav-logo">
+            <img src="/thor-logo.png" alt="THOR Podcast">
+        </a>
+        <a href="/" class="nav-link">Retour à l'accueil</a>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <div class="logo">
+                <img src="/thor-logo.png" alt="THOR Podcast" />
+            </div>
+
+            <!-- Login State -->
+            <div id="loginState" class="login-state">
+                <h1>Connexion</h1>
+                <p class="subtitle">Accédez à vos outils de génération de contenus</p>
+                <button class="login-button" onclick="login()">Se connecter</button>
+                <div class="register-link">
+                    Pas encore de compte ? <a href="/register.html">Créer un compte</a>
+                </div>
+            </div>
+
+            <!-- Dashboard State -->
+            <div id="dashboardState" class="dashboard-state">
+                <h1>Mon espace</h1>
+                <p class="subtitle">Sélectionnez l'outil que vous souhaitez utiliser</p>
+
+                <div class="user-info">
+                    <div class="user-email" id="userEmail">Chargement...</div>
+                    <div class="credits-grid">
+                        <div class="credit-box">
+                            <div class="credit-label">Crédits Titre</div>
+                            <div class="credit-value" id="titreCredits">-</div>
+                        </div>
+                        <div class="credit-box">
+                            <div class="credit-label">Crédits Article</div>
+                            <div class="credit-value" id="audioCredits">-</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="app-cards">
+                    <div class="app-card" onclick="goToTitre()">
+                        <div class="app-card-icon">📝</div>
+                        <div class="app-card-content">
+                            <div class="app-card-title">Titre & Résumé</div>
+                            <div class="app-card-description">
+                                Générez titres et résumés à partir de vos conducteurs
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="app-card" onclick="goToWeb()">
+                        <div class="app-card-icon">📰</div>
+                        <div class="app-card-content">
+                            <div class="app-card-title">Article Web</div>
+                            <div class="app-card-description">
+                                Transformez vos MP3 en articles professionnels
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="logout-button" onclick="logout()">Déconnexion</button>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loadingState" class="loading" style="display: none;">
+                <div class="spinner"></div>
+                Chargement...
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        © 2025 THOR Podcast — L'outil des radios et podcasteurs
+    </footer>
+
+    <script>
+        const COGNITO_CONFIG = {
+            userPoolId: 'eu-west-3_abTBNREBJ',
+            clientId: '4j9q6in6cpcsmroimb30b54d5s',
+            domain: 'https://thor-auth.auth.eu-west-3.amazoncognito.com',
+            redirectUri: 'https://thorpodcast.link/login.html',
+            region: 'eu-west-3'
+        };
+
+        const API_ENDPOINT = 'https://n3gnin38qf.execute-api.eu-west-3.amazonaws.com/prod';
+
+        function login() {
+            const authUrl = `${COGNITO_CONFIG.domain}/login?client_id=${COGNITO_CONFIG.clientId}&response_type=code&scope=email+openid+profile&redirect_uri=${encodeURIComponent(COGNITO_CONFIG.redirectUri)}`;
+            window.location.href = authUrl;
+        }
+
+        function goToTitre() {
+            const authUrl = `${COGNITO_CONFIG.domain}/login?client_id=${COGNITO_CONFIG.clientId}&response_type=token&scope=email+openid+profile&redirect_uri=${encodeURIComponent('https://titre.thorpodcast.link')}`;
+            window.location.href = authUrl;
+        }
+
+        function goToWeb() {
+            const authUrl = `${COGNITO_CONFIG.domain}/login?client_id=${COGNITO_CONFIG.clientId}&response_type=token&scope=email+openid+profile&redirect_uri=${encodeURIComponent('https://web.thorpodcast.link')}`;
+            window.location.href = authUrl;
+        }
+
+        function logout() {
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('idToken');
+            localStorage.removeItem('refreshToken');
+            localStorage.removeItem('kto_token');
+            localStorage.removeItem('kto_user');
+            localStorage.removeItem('thor_web_token');
+            localStorage.removeItem('thor_web_id_token');
+            localStorage.removeItem('thor_web_user');
+            localStorage.removeItem('thor_web_pool');
+
+            const logoutUrl = `${COGNITO_CONFIG.domain}/logout?client_id=${COGNITO_CONFIG.clientId}&logout_uri=${encodeURIComponent(COGNITO_CONFIG.redirectUri)}`;
+            window.location.href = logoutUrl;
+        }
+
+        async function exchangeCodeForTokens(code) {
+            const tokenUrl = `${COGNITO_CONFIG.domain}/oauth2/token`;
+
+            const params = new URLSearchParams({
+                grant_type: 'authorization_code',
+                client_id: COGNITO_CONFIG.clientId,
+                code: code,
+                redirect_uri: COGNITO_CONFIG.redirectUri
+            });
+
+            try {
+                const response = await fetch(tokenUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: params.toString()
+                });
+
+                if (!response.ok) {
+                    throw new Error('Token exchange failed');
+                }
+
+                const tokens = await response.json();
+                localStorage.setItem('accessToken', tokens.access_token);
+                localStorage.setItem('idToken', tokens.id_token);
+                if (tokens.refresh_token) {
+                    localStorage.setItem('refreshToken', tokens.refresh_token);
+                }
+
+                return tokens;
+            } catch (error) {
+                console.error('Error exchanging code:', error);
+                throw error;
+            }
+        }
+
+        function parseJwt(token) {
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+                return JSON.parse(jsonPayload);
+            } catch (e) {
+                return null;
+            }
+        }
+
+        async function fetchSubscription(token) {
+            try {
+                const response = await fetch(`${API_ENDPOINT}/subscription`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch subscription');
+                }
+
+                return await response.json();
+            } catch (error) {
+                console.error('Error fetching subscription:', error);
+                return null;
+            }
+        }
+
+        async function createCheckoutSession(plan) {
+            const idToken = localStorage.getItem('idToken');
+
+            if (!idToken) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_ENDPOINT}/stripe/create-checkout-session`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${idToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        plan: plan,
+                        successUrl: 'https://thorpodcast.link/login.html?checkout=success',
+                        cancelUrl: 'https://thorpodcast.link/?checkout=cancelled'
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to create checkout session');
+                }
+
+                const data = await response.json();
+
+                if (data.checkoutUrl) {
+                    localStorage.removeItem('pendingSubscription');
+                    window.location.href = data.checkoutUrl;
+                }
+            } catch (error) {
+                console.error('Checkout error:', error);
+                alert('Erreur lors de la création de la session de paiement');
+            }
+        }
+
+        async function showDashboard() {
+            const idToken = localStorage.getItem('idToken');
+
+            if (!idToken) {
+                document.getElementById('loginState').classList.remove('hidden');
+                document.getElementById('loadingState').style.display = 'none';
+                return;
+            }
+
+            const payload = parseJwt(idToken);
+            if (payload && payload.email) {
+                document.getElementById('userEmail').textContent = payload.email;
+            }
+
+            const pendingPlan = localStorage.getItem('pendingSubscription');
+            if (pendingPlan) {
+                await createCheckoutSession(pendingPlan);
+                return;
+            }
+
+            const subscription = await fetchSubscription(idToken);
+            if (subscription) {
+                document.getElementById('titreCredits').textContent = subscription.remainingTitreCredits || 0;
+                document.getElementById('audioCredits').textContent = subscription.remainingAudioCredits || 0;
+            }
+
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('dashboardState').classList.add('show');
+        }
+
+        async function handleCallback() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get('code');
+
+            if (code) {
+                document.getElementById('loadingState').style.display = 'block';
+
+                try {
+                    await exchangeCodeForTokens(code);
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                    await showDashboard();
+                } catch (error) {
+                    console.error('Authentication error:', error);
+                    document.getElementById('loadingState').style.display = 'none';
+                    document.getElementById('loginState').classList.remove('hidden');
+
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'error';
+                    errorDiv.textContent = 'Erreur d\'authentification. Veuillez réessayer.';
+                    document.querySelector('.card').appendChild(errorDiv);
+                }
+            } else {
+                const idToken = localStorage.getItem('idToken');
+                if (idToken) {
+                    document.getElementById('loadingState').style.display = 'block';
+                    await showDashboard();
+                } else {
+                    document.getElementById('loginState').classList.remove('hidden');
+                }
+            }
+        }
+
+        handleCallback();
+    </script>
+</body>
+</html>
